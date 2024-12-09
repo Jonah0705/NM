@@ -58,6 +58,11 @@ def interpolate():
         y_values = [float(row[1].get()) for row in rows]
         target = float(target_entry.get())
         
+        # Check for duplicate x values
+        if len(x_values) != len(set(x_values)):
+            messagebox.showerror("Input Error", "X values must be unique.")
+            return
+        
         if len(x_values) < 2:
             messagebox.showerror("Input Error", "At least two data points are required.")
             return
@@ -85,6 +90,7 @@ def interpolate():
         plot_graph(x_values, y_values, target, predicted)
     except Exception as e:
         messagebox.showerror("Error", str(e))
+
 
 def calculate_true_error():
     try:
