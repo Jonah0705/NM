@@ -67,7 +67,10 @@ def interpolate():
             messagebox.showerror("Input Error", "At least two data points are required.")
             return
         
-        # Choose interpolation method
+        if target < min(x_values) or target > max(x_values):
+            messagebox.showerror("Input Error", "Target value must be within the range of X values.")
+            return
+        
         if len(x_values) > 3:
             predicted = cubic_spline_interpolation(x_values, y_values, target)
             method = "Cubic Spline Interpolation"
@@ -110,7 +113,6 @@ def add_row():
     row[1].grid(row=len(rows), column=1, padx=5, pady=2)
     rows.append(row)
 
-# GUI Setup
 root = tk.Tk()
 root.title("Enhanced Interpolation Calculator")
 root.geometry("600x600")
@@ -124,7 +126,6 @@ data_frame.pack()
 tk.Label(data_frame, text="X", width=10).grid(row=0, column=0)
 tk.Label(data_frame, text="Y", width=10).grid(row=0, column=1)
 
-# Add initial rows
 rows = []
 for _ in range(2):
     add_row()
