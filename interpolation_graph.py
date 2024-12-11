@@ -91,13 +91,20 @@ def interpolate():
             predicted = linear_interpolation(x_values, y_values, target)
             method = "Linear Interpolation"
 
+        # Clamp predicted value to non-negative
+        predicted = max(predicted, 0)
+
+        result_text.set("")
+
         result_text.set(f"Method: {method}\nPredicted Value: {predicted:.4f}\n")
+
         true_value_frame.pack(pady=10)
 
         plot_graph(x_values, y_values, target, predicted)
     except Exception as e:
         result_text.set("")
         messagebox.showerror("Error", str(e))
+
 
 
 def calculate_true_error():
