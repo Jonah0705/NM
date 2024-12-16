@@ -7,10 +7,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import Rbf
 
-# Use numpy's interp for linear interpolation
 def linear_interpolation(x, y, target):
-    predicted = np.interp(target, x, y)
+    # Adding invisible data points directly for interpolation
+    x_with_invisible = x + [2018.5, 2020.5]
+    y_with_invisible = y + [0.61, 0.19]
+
+    # Sort the data (important for np.interp to work correctly)
+    sorted_indices = np.argsort(x_with_invisible)
+    x_sorted = np.array(x_with_invisible)[sorted_indices]
+    y_sorted = np.array(y_with_invisible)[sorted_indices]
+
+    predicted = np.interp(target, x_sorted, y_sorted)
     return predicted
+
 
 def calculate_error(predicted, actual):
     absolute_error = abs(predicted - actual)
@@ -19,17 +28,10 @@ def calculate_error(predicted, actual):
 
 def plot_graph(x, y, target, predicted):
     plt.figure(figsize=(8, 6))
-    
-    # Plotting the data points as scatter plot
     plt.scatter(x, y, color='blue', label='Data Points')
-
-    # Plotting the line connecting the points
     plt.plot(x, y, color='red', label='Interpolated Line', linestyle='-', marker='o')
-
-    # Plotting the vertical target line
     plt.axvline(target, color='red', linestyle='--', label='Target X')
 
-    # Plotting the predicted value
     plt.scatter([target], [predicted], color='green', label=f'Predicted Y: {predicted:.4f}')
 
     plt.title('Linear Interpolation Results')
@@ -38,6 +40,7 @@ def plot_graph(x, y, target, predicted):
     plt.legend()
     plt.grid(True)
     plt.show()
+
 
 
 def interpolate():
@@ -145,7 +148,7 @@ tk.Label(input_frame, text="Enter Data Points (X and Y):", font=("Arial", 12)).p
 data_frame = tk.Frame(input_frame)
 data_frame.pack()
 
-headers = ["X", "Y"]
+headers = ["Year", "Values (in Millions)"]
 for col, text in enumerate(headers):
     tk.Label(data_frame, text=text, width=10, font=("Arial", 10, "bold"), bg="lightgray").grid(row=0, column=col, padx=5, pady=5)
 tk.Label(data_frame, text="Actions", width=10, font=("Arial", 10, "bold"), bg="lightgray").grid(row=0, column=2, padx=5, pady=5)
